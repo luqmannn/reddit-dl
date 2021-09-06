@@ -1,4 +1,4 @@
-# ani-list
+# redit-dl
 A simple shell script to download image from sub-reddit.
 
 ## Dependencies
