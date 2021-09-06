@@ -1,0 +1,20 @@
+#! /usr/bin/bash
+printf "Type with no space and press Enter\n"
+echo "----------------------------------"
+printf "Enter subredit [e.g:linuxmemes]: "
+read subredit
+printf "Enter category [e.g: hot, new, top]: "
+read category
+printf "Enter number limit [e.g: 3, 5, 7, 9, 10]: "
+read limit
+
+# Set the size of url.txt to 0
+truncate -s 0 url.txt
+
+# Download the image from sub-reddit. Change the user agent as you see it fit
+curl -s -H "User-agent: 'Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0'" https://www.reddit.com/r/${subredit}/${category}.json?limit=${limit} | jq . | grep url_overridden_by_dest | sed 's/"//g' | awk '{$1=$1};1' | sed 's/[^ ]* //' | sed 's/,$//' > url.txt
+
+# Change the folder to place the image
+mv url.txt ~/pic
+aria2c -i ~/pic/url.txt
+mv *.jpg *.png ~/pic
